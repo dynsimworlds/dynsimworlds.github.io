@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SimWorlds: A Multi-Agent System for Dynamic 3D Scene Creation</title>
+<meta name="description" content="SimWorlds generates simulation-ready dynamic 3D scenes from text — liquids, particles, rigid-body cascades, and articulated motion — via a planner–coder–reviewer multi-agent system, and introduces the 4DBuildBench benchmark.">
+
+<!-- Social preview -->
+<meta property="og:title" content="SimWorlds: A Multi-Agent System for Dynamic 3D Scene Creation">
+<meta property="og:description" content="Simulation-ready dynamic 3D scenes from text, evaluated with the 4DBuildBench benchmark.">
+<meta property="og:image" content="assets/figures/teaser.png">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --fg:#1a1a1f;
+  --muted:#5b6170;
+  --soft:#8a90a0;
+  --line:#e7e8ee;
+  --bg:#ffffff;
+  --bg-alt:#f7f8fb;
+  --accent:#4f46e5;
+  --accent-soft:#eef0fe;
+  --accent-2:#0ea5a4;
+  --radius:14px;
+  --maxw:980px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  color:var(--fg);
+  background:var(--bg);
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  font-size:17px;
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+code,.mono{font-family:'Roboto Mono',ui-monospace,Menlo,monospace}
+
+/* ---------- HERO ---------- */
+header.hero{
+  text-align:center;
+  padding:72px 0 36px;
+  border-bottom:1px solid var(--line);
+  background:
+    radial-gradient(1200px 380px at 50% -120px, var(--accent-soft), transparent 70%),
+    var(--bg);
+}
+.badge{
+  display:inline-block;
+  font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--accent);background:var(--accent-soft);
+  padding:6px 14px;border-radius:999px;margin-bottom:22px;
+}
+h1.title{
+  font-size:clamp(30px,4.6vw,50px);
+  line-height:1.12;
+  font-weight:800;
+  letter-spacing:-0.02em;
+  margin:0 auto 8px;
+  max-width:860px;
+}
+h1.title .name{
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.subtitle{font-size:18px;color:var(--muted);max-width:640px;margin:14px auto 28px}
+
+.authors{font-size:18px;margin:18px 0 6px;line-height:2}
+.authors a{color:var(--fg);font-weight:600}
+.authors sup{color:var(--accent);font-weight:600}
+.affil{color:var(--muted);font-size:15.5px;margin-bottom:6px}
+.note{color:var(--soft);font-size:14px}
+
+/* ---------- BUTTONS ---------- */
+.links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:30px 0 4px}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  background:#1a1a1f;color:#fff;
+  padding:11px 20px;border-radius:999px;
+  font-size:15px;font-weight:600;
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  box-shadow:0 1px 2px rgba(0,0,0,.08);
+}
+.btn:hover{transform:translateY(-2px);text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,.14)}
+.btn.alt{background:#fff;color:var(--fg);border:1px solid var(--line)}
+.btn.disabled{background:#eceef3;color:#9aa0ad;cursor:not-allowed;box-shadow:none}
+.btn.disabled:hover{transform:none;box-shadow:none}
+.btn svg{width:17px;height:17px;fill:currentColor}
+
+/* ---------- SECTIONS ---------- */
+section{padding:60px 0;border-bottom:1px solid var(--line)}
+section.alt{background:var(--bg-alt)}
+h2{
+  font-size:30px;font-weight:800;letter-spacing:-0.02em;
+  text-align:center;margin:0 0 10px;
+}
+.lead{color:var(--muted);text-align:center;max-width:680px;margin:0 auto 36px;font-size:17px}
+p{margin:0 0 18px}
+
+/* ---------- VIDEO / MEDIA ---------- */
+.media{
+  position:relative;width:100%;aspect-ratio:16/9;
+  background:
+    repeating-linear-gradient(45deg,#f0f1f6 0 14px,#eaecf3 14px 28px);
+  border:1px solid var(--line);border-radius:var(--radius);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.media .ph{
+  text-align:center;color:var(--soft);font-weight:600;font-size:15px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.media .ph .play{
+  width:62px;height:62px;border-radius:50%;
+  background:#fff;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+.media .ph .play svg{width:22px;height:22px;fill:var(--accent);margin-left:3px}
+.media video{width:100%;height:100%;object-fit:cover;display:block}
+.caption{text-align:center;color:var(--muted);font-size:14.5px;margin-top:14px;max-width:760px;margin-left:auto;margin-right:auto}
+
+.teaser-img{width:100%;border-radius:var(--radius);border:1px solid var(--line);display:block}
+
+/* abstract */
+.abstract{max-width:760px;margin:0 auto;font-size:17.5px;color:#2a2d36}
+.abstract p:last-child{margin-bottom:0}
+
+/* ---------- PIPELINE STAGES ---------- */
+.stages{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:30px 0 8px}
+.stage{
+  font-family:'Roboto Mono',monospace;font-size:13.5px;font-weight:500;
+  background:#fff;border:1px solid var(--line);border-radius:8px;
+  padding:8px 13px;color:var(--fg);
+}
+.stage.new{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);font-weight:600}
+.arrow{color:var(--soft);align-self:center;font-weight:700}
+
+/* ---------- CARDS ---------- */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px}
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+  padding:24px 22px;
+}
+.card h3{margin:0 0 8px;font-size:18px;font-weight:700}
+.card .ic{
+  width:42px;height:42px;border-radius:10px;background:var(--accent-soft);
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:20px;
+}
+.card p{font-size:15px;color:var(--muted);margin:0}
+
+/* ---------- GALLERY ---------- */
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.gitem .label{font-weight:600;font-size:15px;margin:12px 0 2px}
+.gitem .desc{font-size:14px;color:var(--muted)}
+.pill{
+  display:inline-block;font-size:11.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);margin-right:6px;
+}
+.pill.cloth{background:#eef6ff;color:#2563eb}
+.pill.fluid{background:#e8fbfb;color:#0d9488}
+.pill.rigid{background:#fff1e8;color:#ea580c}
+.pill.particle{background:#f3e8ff;color:#9333ea}
+.pill.soft{background:#fdeef4;color:#db2777}
+
+/* ---------- TABLE ---------- */
+.tablewrap{overflow-x:auto;margin-top:10px;border:1px solid var(--line);border-radius:var(--radius)}
+table{border-collapse:collapse;width:100%;font-size:15px;background:#fff}
+th,td{padding:12px 16px;text-align:center;border-bottom:1px solid var(--line)}
+th{background:var(--bg-alt);font-weight:700;font-size:13.5px;letter-spacing:.02em}
+td:first-child,th:first-child{text-align:left;font-weight:600}
+tbody tr:last-child td{border-bottom:none}
+tr.ours{background:var(--accent-soft)}
+tr.ours td{font-weight:700}
+.up::after{content:" ↑";color:var(--accent-2)}
+.down::after{content:" ↓";color:var(--accent-2)}
+.tnote{font-size:13.5px;color:var(--soft);text-align:center;margin-top:12px}
+.todo{color:var(--soft);font-style:italic}
+
+/* ---------- BIBTEX ---------- */
+pre.bib{
+  background:#15161c;color:#e7e9f0;border-radius:var(--radius);
+  padding:22px 24px;overflow-x:auto;font-size:13.5px;line-height:1.7;
+  font-family:'Roboto Mono',monospace;
+}
+pre.bib .k{color:#8aa9ff}
+pre.bib .s{color:#9be4b0}
+
+/* ---------- FOOTER ---------- */
+footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
+
+@media(max-width:760px){
+  .cards{grid-template-columns:1fr}
+  .gallery{grid-template-columns:1fr}
+  section{padding:46px 0}
+  body{font-size:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">Text → Dynamic 3D Scene</span>
+    <h1 class="title"><span class="name">SimWorlds</span>: A Multi-Agent System for<br>Dynamic 3D Scene Creation</h1>
+    <p class="subtitle">Simulation-ready dynamic 3D scenes from text alone — flowing liquids, emitting particles, rigid-body cascades, and articulated mechanical motion.</p>
+
+    <div class="authors">
+      <a href="#">Author One</a><sup>1</sup>,
+      <a href="#">Author Two</a><sup>1</sup>,
+      <a href="#">Author Three</a><sup>2</sup>,
+      <a href="#">Author Four</a><sup>1,2</sup>
+    </div>
+    <div class="affil"><sup>1</sup>Affiliation One &nbsp;·&nbsp; <sup>2</sup>Affiliation Two</div>
+    <div class="note">Under review · placeholder author list</div>
+
+    <div class="links">
+      <a class="btn" href="#"><svg viewBox="0 0 384 512"><path d="M320 464c8.8 0 16-7.2 16-16V160h-80c-17.7 0-32-14.3-32-32V48H64c-8.8 0-16 7.2-16 16v384c0 8.8 7.2 16 16 16h256zM0 64C0 28.7 28.7 0 64 0h165.5c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64z"/></svg>Paper</a>
+      <a class="btn alt" href="#"><svg viewBox="0 0 448 512"><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM160 0C72.5 0 0 72.5 0 160v192c0 88.4 71.6 160 160 160h128c88.4 0 160-71.6 160-160V160C448 72.5 375.5 0 288 0H160z"/></svg>arXiv</a>
+      <a class="btn alt" href="https://github.com/chunjiangL/blender_agent_hl"><svg viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8z"/></svg>Code</a>
+      <a class="btn disabled" aria-disabled="true"><svg viewBox="0 0 384 512"><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>Video (soon)</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== TEASER ===================== -->
+<section>
+  <div class="wrap">
+    <div class="media">
+      <video controls poster="assets/figures/teaser.png" preload="none">
+        <!-- Drop the teaser .mp4 here, e.g. assets/videos/teaser.mp4 -->
+        <source src="assets/videos/teaser.mp4" type="video/mp4">
+      </video>
+    </div>
+    <p class="caption"><strong>Teaser (placeholder).</strong> SimWorlds turns a single text prompt into a simulation-ready dynamic scene. Poster shows the paper teaser figure; drop <code>assets/videos/teaser.mp4</code> in to replace.</p>
+  </div>
+</section>
+
+<!-- ===================== ABSTRACT ===================== -->
+<section class="alt">
+  <div class="wrap">
+    <h2>Abstract</h2>
+    <div class="abstract">
+      <p>LLM agents are increasingly used to translate natural language into 3D scenes in a procedural way, but existing systems focus on <em>static</em> output. Dynamic, simulation-ready scenes from text alone — liquids flowing, particles emitting, rigid-body cascades, and articulated mechanical motion — remain largely unexplored despite their value as editable content and as physics-grounded training data for video generation and embodied AI.</p>
+      <p>Two challenges set the dynamic case apart from static text-to-scene work: an agent must jointly coordinate spatial layout, multiple physics solvers, animation timelines, camera, and lighting in a single coherent scene; and verifying motion correctness from rendered video is fundamentally harder than judging a single image. We present <strong>SimWorlds</strong>, a multi-agent framework that produces simulation-ready dynamic 3D scenes from text, with Blender-specific procedural knowledge, a planner–coder–reviewer workflow driving a fixed ordered sequence of construction stages, a layered scene protocol enforced by an orchestrator-side verifier, and a runtime-state inspection tool suite that catches mechanism failures the rendered image cannot reveal. We also introduce <strong>4DBuildBench</strong>, a benchmark for assessing both visual fidelity and physical consistency of procedural dynamic 3D scenes generated from text. Experiments show that SimWorlds outperforms prior dynamic Blender generation baselines.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== METHOD ===================== -->
+<section>
+  <div class="wrap">
+    <h2>How SimWorlds Works</h2>
+    <p class="lead">A planner–coder–reviewer loop drives a fixed, ordered sequence of construction stages. The planner stays qualitative; the coder owns every number; the reviewer re-judges from rendered evidence.</p>
+
+    <img class="teaser-img" src="assets/figures/pipeline.png" alt="SimWorlds pipeline">
+
+    <div class="stages">
+      <span class="stage">modeling</span><span class="arrow">→</span>
+      <span class="stage">uv</span><span class="arrow">→</span>
+      <span class="stage">texture</span><span class="arrow">→</span>
+      <span class="stage new">deformation&nbsp;setup</span><span class="arrow">→</span>
+      <span class="stage new">motion</span><span class="arrow">→</span>
+      <span class="stage">camera</span><span class="arrow">→</span>
+      <span class="stage">light</span><span class="arrow">→</span>
+      <span class="stage">render</span>
+    </div>
+    <p class="caption">Eight ordered stages. <span style="color:var(--accent);font-weight:600">deformation setup</span> and <span style="color:var(--accent);font-weight:600">motion</span> extend the static pipeline to cover the four dynamics axes: animated camera, prop motion, physics simulation, and character animation.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="ic">🧩</div>
+        <h3>Layered scene protocol</h3>
+        <p>A three-level collection tree plus per-object Empty roots make "logical object," "structural contact," and "grounding" first-class concepts on top of Blender's native graph.</p>
+      </div>
+      <div class="card">
+        <div class="ic">✅</div>
+        <h3>Orchestrator-side verifier</h3>
+        <p>After every state-mutating call, a verifier runs the full ruleset — structural, geometric (BVH contact &amp; penetration), and time-axis — and blocks progress until <code>ok=true</code>.</p>
+      </div>
+      <div class="card">
+        <div class="ic">🔬</div>
+        <h3>Runtime-state inspection</h3>
+        <p>A tool suite reads live <code>bpy</code> engine state to catch mechanism failures the rendered image cannot reveal — e.g. motion that is keyframed rather than simulated.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BENCHMARK ===================== -->
+<section class="alt">
+  <div class="wrap">
+    <h2>4DBuildBench</h2>
+    <p class="lead">50 scenes spanning five dynamic solver categories × three difficulty levels, plus static controls — evaluated on a two-track protocol that scores any system identically.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="ic">🗂️</div>
+        <h3>50 scenes, 3 levels</h3>
+        <p><strong>L1</strong> solo-simple · <strong>L2</strong> intra-complex (self-collision, pinning, force fields) · <strong>L3</strong> inter-coupling (e.g. a rigid body crushing a soft body). Hand-authored ground-truth YAML per scene.</p>
+      </div>
+      <div class="card">
+        <div class="ic">⚙️</div>
+        <h3>Engine-state audit</h3>
+        <p>Runs in headless Blender, system-agnostic. 42 typed predicates yield <strong>MPR</strong> (Mechanism Pass Rate) and <strong>SPR</strong> (Structural Pass Rate) — catching mechanism-cheating an image misses.</p>
+      </div>
+      <div class="card">
+        <div class="ic">👁️</div>
+        <h3>VLM judge</h3>
+        <p>A vision–language judge scores five dimensions — objects present, spatial relations, actions visible, visual quality, aesthetics — as a pass fraction over atomic items.</p>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:28px">
+      <span class="pill cloth">cloth</span>
+      <span class="pill fluid">fluid</span>
+      <span class="pill rigid">rigid</span>
+      <span class="pill particle">particle</span>
+      <span class="pill soft">soft</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RESULTS ===================== -->
+<section>
+  <div class="wrap">
+    <h2>Results</h2>
+    <p class="lead">SimWorlds outperforms prior dynamic Blender generation baselines on both visual fidelity and physical consistency. Full numbers are being finalized.</p>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>VLM Fidelity <span class="up"></span></th>
+            <th>MPR <span class="up"></span></th>
+            <th>SPR <span class="up"></span></th>
+            <th>Success&nbsp;Rate <span class="up"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Prior baseline</td>
+            <td class="todo">—</td><td class="todo">—</td><td class="todo">—</td><td class="todo">—</td>
+          </tr>
+          <tr class="ours">
+            <td>SimWorlds (ours)</td>
+            <td class="todo">—</td><td class="todo">—</td><td class="todo">—</td><td class="todo">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tnote">Placeholder table — baseline and final metrics on the 50-scene benchmark are in progress.</p>
+
+    <div style="margin-top:36px">
+      <img class="teaser-img" src="assets/figures/qualitative.png" alt="Qualitative results">
+      <p class="caption"><strong>Qualitative results.</strong> Dynamic scenes generated by SimWorlds across solver categories.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== GALLERY ===================== -->
+<section class="alt">
+  <div class="wrap">
+    <h2>Scene Gallery</h2>
+    <p class="lead">Rendered video clips per solver category. Drop <code>.mp4</code> files into <code>assets/videos/</code> to replace the placeholders.</p>
+
+    <div class="gallery">
+      <div class="gitem">
+        <div class="media"><div class="ph"><div class="play"><svg viewBox="0 0 384 512"><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></div>Cloth · video placeholder</div></div>
+        <div class="label"><span class="pill cloth">cloth</span> Draping &amp; pinning</div>
+        <div class="desc">Cloth solver with self-collision and pinned vertices.</div>
+      </div>
+      <div class="gitem">
+        <div class="media"><div class="ph"><div class="play"><svg viewBox="0 0 384 512"><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></div>Fluid · video placeholder</div></div>
+        <div class="label"><span class="pill fluid">fluid</span> Liquid pour</div>
+        <div class="desc">Mantaflow liquid domain with flow inflow and obstacles.</div>
+      </div>
+      <div class="gitem">
+        <div class="media"><div class="ph"><div class="play"><svg viewBox="0 0 384 512"><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></div>Rigid · video placeholder</div></div>
+        <div class="label"><span class="pill rigid">rigid</span> Rigid-body cascade</div>
+        <div class="desc">Stacked rigid bodies collapsing under gravity.</div>
+      </div>
+      <div class="gitem">
+        <div class="media"><div class="ph"><div class="play"><svg viewBox="0 0 384 512"><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></div>Particle · video placeholder</div></div>
+        <div class="label"><span class="pill particle">particle</span> Emitter system</div>
+        <div class="desc">Particle system with finite count and lifetime.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BIBTEX ===================== -->
+<section>
+  <div class="wrap">
+    <h2>BibTeX</h2>
+    <pre class="bib"><span class="k">@inproceedings</span>{simworlds2026,
+  <span class="k">title</span>     = {<span class="s">SimWorlds: A Multi-Agent System for Dynamic 3D Scene Creation</span>},
+  <span class="k">author</span>    = {<span class="s">Anonymous Authors</span>},
+  <span class="k">booktitle</span> = {<span class="s">Under review</span>},
+  <span class="k">year</span>      = {<span class="s">2026</span>}
+}</pre>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>SimWorlds · project page. Built with placeholder media — swap figures in <code>assets/figures/</code> and videos in <code>assets/videos/</code>.</p>
+    <p style="margin-top:6px">Page design inspired by minimal academic project templates.</p>
+  </div>
+</footer>
+
+</body>
+</html>
