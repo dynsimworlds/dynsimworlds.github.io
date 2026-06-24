@@ -330,13 +330,13 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
       </div>
       <div class="card">
         <div class="ic">✅</div>
-        <h3>Orchestrator-side verifier</h3>
+        <h3>Deterministic verifier</h3>
         <p>After every state-mutating call, a verifier runs the full ruleset — structural, geometric (BVH contact &amp; penetration), and time-axis — and blocks progress until <code>ok=true</code>.</p>
       </div>
       <div class="card">
         <div class="ic">🔬</div>
-        <h3>Runtime-state inspection</h3>
-        <p>A tool suite reads live <code>bpy</code> engine state to catch mechanism failures the rendered image cannot reveal — e.g. motion that is keyframed rather than simulated.</p>
+        <h3>State &amp; render inspection</h3>
+        <p>A tool suite exposes both live <code>bpy</code> engine state — physics caches, modifiers, animation channels — and multi-angle rendered previews, catching mechanism failures (e.g. motion that is keyframed, not simulated) a single image would miss.</p>
       </div>
     </div>
   </div>
