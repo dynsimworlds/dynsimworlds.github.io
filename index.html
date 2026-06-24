@@ -380,32 +380,31 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
 <section>
   <div class="wrap">
     <h2>Results</h2>
-    <p class="lead">SimWorlds outperforms prior dynamic Blender generation baselines on both visual fidelity and physical consistency. Full numbers are being finalized.</p>
+    <p class="lead">On the full 50-scene 4DBuildBench, SimWorlds and VIGA reach comparable VLM — a video judge can barely tell them apart — yet SimWorlds wins decisively on the engine-state axes: reading the simulator state exposes the faked dynamics the rendered frames hide.</p>
 
     <div class="tablewrap" style="width:min(1180px,92vw);margin-left:50%;transform:translateX(-50%)">
       <table style="font-size:18px">
         <thead>
           <tr>
             <th>Method</th>
-            <th>VLM Fidelity <span class="up"></span></th>
             <th>MPR <span class="up"></span></th>
             <th>SPR <span class="up"></span></th>
-            <th>Success&nbsp;Rate <span class="up"></span></th>
+            <th>VLM <span class="up"></span></th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Prior baseline</td>
-            <td class="todo">—</td><td class="todo">—</td><td class="todo">—</td><td class="todo">—</td>
+            <td>VIGA</td>
+            <td>0.71</td><td>0.70</td><td>0.78</td>
           </tr>
           <tr class="ours">
             <td>SimWorlds (ours)</td>
-            <td class="todo">—</td><td class="todo">—</td><td class="todo">—</td><td class="todo">—</td>
+            <td>0.86</td><td>0.87</td><td>0.82</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <p class="tnote">Placeholder table — baseline and final metrics on the 50-scene benchmark are in progress.</p>
+    <p class="tnote">Full 50-scene 4DBuildBench, both methods text-only, Claude&nbsp;Opus&nbsp;4.7 backbone. MPR / SPR are engine-state audit aggregates; VLM is the GPT-5.5 itemized judge (mean over five dimensions). Higher is better.</p>
 
     <div style="margin-top:36px;width:min(1180px,92vw);margin-left:50%;transform:translateX(-50%)">
       <img class="teaser-img" src="assets/figures/qualitative.png" alt="Qualitative results">
