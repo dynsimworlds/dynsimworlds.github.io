@@ -114,7 +114,11 @@ h2{
   font-size:30px;font-weight:800;letter-spacing:-0.02em;
   text-align:center;margin:0 0 10px;
 }
-.lead{color:var(--muted);text-align:center;max-width:680px;margin:0 auto 36px;font-size:17px}
+.lead{color:var(--muted);text-align:left;max-width:760px;margin:0 auto 26px;font-size:17px}
+.blist{max-width:760px;margin:0 auto 8px;padding-left:22px}
+.blist li{margin:0 0 9px;color:var(--fg);font-size:16.5px;line-height:1.6}
+.blist li::marker{color:var(--accent)}
+.blist strong{font-weight:700}
 p{margin:0 0 18px}
 
 /* ---------- VIDEO / MEDIA ---------- */
@@ -255,12 +259,12 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
     <h1 class="title"><span class="name">SimWorlds</span>: A Multi-Agent System for Dynamic 3D Scene Creation</h1>
 
     <div class="authors">
-      <a href="#">Chunjiang Liu</a><sup>1</sup>,
-      <a href="#">Xiaoyuan Wang</a><sup>1</sup>,
-      <a href="#">Haoyu Chen</a><sup>2</sup>,
-      <a href="#">Yizhou Zhao</a><sup>1</sup>,
-      <a href="#">Ming-Hsuan Yang</a><sup>3</sup>,
-      <a href="#">László A. Jeni</a><sup>1</sup>
+      <a href="https://scholar.google.com/citations?user=zm07I1YAAAAJ" target="_blank" rel="noopener">Chunjiang Liu</a><sup>1</sup>,
+      <span>Xiaoyuan Wang</span><sup>1</sup>,
+      <a href="https://scholar.google.com/citations?user=WQnlt4YAAAAJ" target="_blank" rel="noopener">Haoyu Chen</a><sup>2</sup>,
+      <a href="https://scholar.google.com/citations?user=nVKRaf4AAAAJ" target="_blank" rel="noopener">Yizhou Zhao</a><sup>1</sup>,
+      <a href="https://scholar.google.com/citations?user=p9-ohHsAAAAJ" target="_blank" rel="noopener">Ming-Hsuan Yang</a><sup>3</sup>,
+      <a href="https://scholar.google.com/citations?user=Wdnc-mEAAAAJ" target="_blank" rel="noopener">László A. Jeni</a><sup>1</sup>
     </div>
     <div class="affil"><sup>1</sup>Carnegie Mellon University &nbsp;·&nbsp; <sup>2</sup>Harvard University &nbsp;·&nbsp; <sup>3</sup>UC Merced</div>
 
@@ -307,7 +311,12 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
 <section>
   <div class="wrap">
     <h2>How SimWorlds Works</h2>
-    <p class="lead">A planner–coder–reviewer loop drives a fixed, ordered sequence of construction stages. The planner stays qualitative; the coder owns every number; the reviewer re-judges from rendered evidence.</p>
+    <p class="lead">A planner–coder–reviewer loop drives a fixed, ordered sequence of construction stages:</p>
+    <ul class="blist">
+      <li><strong>Planner</strong> — stays qualitative, committing to intent and assembly, never to numbers.</li>
+      <li><strong>Coder</strong> — owns every number, writing <code>bpy</code> that extends the live scene.</li>
+      <li><strong>Reviewer</strong> — re-judges each stage from rendered evidence and runtime readouts.</li>
+    </ul>
 
 
     <div class="stages">
