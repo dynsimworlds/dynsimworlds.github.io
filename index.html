@@ -167,35 +167,56 @@ p{margin:0 0 18px}
 .stage.new{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);font-weight:600}
 .arrow{color:var(--soft);align-self:center;font-weight:700}
 
-/* ---------- ANIMATED PIPELINE FIGURE ---------- */
-.fig{max-width:900px;margin:14px auto 0}
-.band{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px}
-.band.lft{justify-content:flex-start}
-.band.rgt{justify-content:flex-end}
-.band.top{align-items:flex-start}
-.col{display:flex;flex-direction:column;align-items:center}
-.drop{width:2px;height:14px;background:var(--line)}
-.reschips{display:flex;flex-direction:column;gap:6px;align-items:center}
-.amid{align-self:flex-start;margin-top:15px}
-.bdown{text-align:center;color:var(--soft);font-size:20px;line-height:1;margin:10px 0}
-.bdown.lft{text-align:left;padding-left:46px}
-.bdown.rgt{text-align:right;padding-right:46px}
-@media(max-width:760px){.band.lft,.band.rgt{justify-content:center}.bdown.lft,.bdown.rgt{text-align:center;padding:0}}
-.aarrow{color:var(--soft);font-weight:700;font-size:15px}
-.fnode{background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:9px 15px;color:var(--fg);
-  font-weight:600;font-size:14px;text-align:center;line-height:1.25;
+/* ---------- PIPELINE FIGURE (faithful to paper layout) ---------- */
+.pg{display:grid;gap:14px 16px;max-width:1000px;margin:18px auto 0;align-items:stretch;
+  grid-template-columns:0.95fr 2.3fr 1.15fr 0.78fr;
+  grid-template-areas:
+    "input  coding  mcp  kb"
+    "plan   coding  mcp  kb"
+    "plan   review  mcp  blender"
+    "out    out     mcp  blender";}
+.region{border:1.5px solid var(--line);border-radius:14px;padding:13px;position:relative;background:#fff;transition:box-shadow .3s}
+.rtitle{font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:9px}
+.rsub{display:block;font-weight:400;font-size:11px;color:var(--soft);margin-top:3px}
+.region.green{background:#eafaf0;border-color:#bfe8cf}
+.region.purple{background:#f4ecfe;border-color:#dcc7f5}
+.region.orange{background:#fff2ea;border-color:#fbd6bf}
+.region.amber{background:#fef8e8;border-color:#f1dfa0}
+.region.blue{background:#eaf1fe;border-color:#cdddf8}
+.region.gray{background:#f3f4f7;border-color:#e2e4ea}
+.green .rtitle{color:#15803d}.purple .rtitle{color:#7c3aed}.orange .rtitle{color:#ea580c}
+.amber .rtitle{color:#b45309}.blue .rtitle{color:#2563eb}.gray .rtitle{color:#64748b}
+.pg-input{grid-area:input;display:flex;flex-direction:column;justify-content:center;font-weight:700;font-size:14.5px}
+.pg-plan{grid-area:plan;display:flex;flex-direction:column}
+.pg-coding{grid-area:coding}
+.pg-review{grid-area:review}
+.pg-mcp{grid-area:mcp}
+.pg-kb{grid-area:kb;display:flex;flex-direction:column;justify-content:center;text-align:center;font-weight:700;font-size:13px}
+.pg-blender{grid-area:blender;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.pg-output{grid-area:out}
+.subbox{background:#fff;border:1.5px solid #dcc7f5;border-radius:9px;padding:9px 10px;font-size:12.5px;
+  font-weight:600;margin-top:8px;text-align:center;transition:border-color .3s,background-color .3s,color .3s,box-shadow .3s}
+.subbox:first-of-type{margin-top:0}
+.taskrow{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.task{background:#fff;border:1.5px solid #fbd6bf;border-radius:9px;padding:6px 3px;text-align:center;
   transition:border-color .3s,background-color .3s,color .3s,box-shadow .3s,transform .3s}
-.fnode .sub{display:block;font-weight:400;font-size:10.5px;color:var(--soft);margin-top:2px}
-.panel{position:relative;border:1.5px solid var(--line);border-radius:16px;background:#fafbfe;padding:26px 18px 18px}
-.panel-label{position:absolute;top:-10px;left:22px;background:var(--bg);padding:0 10px;
-  font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
-.track{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:7px;margin-bottom:20px}
-.snode{font-family:'Roboto Mono',monospace;font-size:12.5px;font-weight:500;background:#fff;
-  border:1.5px solid var(--line);border-radius:8px;padding:6px 11px;color:var(--fg);
+.tname{font-family:'Roboto Mono',monospace;font-size:10px;font-weight:600;display:block;line-height:1.15}
+.thumb{display:block;height:24px;border-radius:5px;margin-top:5px;
+  background:repeating-linear-gradient(45deg,#f1f2f7 0 5px,#e7e9f0 5px 10px)}
+.rev{background:#fff;border:1.5px solid #f1dfa0;border-radius:9px;padding:9px 3px 6px;text-align:center;
+  font-size:10.5px;font-weight:600;position:relative;
   transition:border-color .3s,background-color .3s,color .3s,box-shadow .3s,transform .3s}
-.chips{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin-top:16px}
-.chip2{font-size:11.5px;font-weight:600;color:var(--muted);background:#fff;border:1.5px solid var(--line);
-  border-radius:999px;padding:5px 12px;transition:border-color .3s,background-color .3s,color .3s,box-shadow .3s}
+.pf{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:8.5px;font-weight:700;
+  padding:1px 5px;border-radius:6px;background:#fff;border:1px solid var(--line);color:var(--soft)}
+.tools{list-style:none;margin:0;padding:0;font-family:'Roboto Mono',monospace;font-size:10.5px;color:#3b4252;line-height:1.85}
+.filmstrip{display:flex;gap:4px;margin-top:4px}
+.filmstrip span{flex:1;height:30px;border-radius:4px;border:1px solid #bfe8cf;
+  background:repeating-linear-gradient(45deg,#dff5e7 0 5px,#cdeed8 5px 10px)}
+@media(max-width:760px){
+  .pg{grid-template-columns:1fr 1fr;grid-template-areas:
+    "input  plan" "coding coding" "review review" "mcp kb" "out blender";}
+  .taskrow{grid-template-columns:repeat(4,1fr)}
+}
 /* states */
 .run{border-color:var(--accent)!important;background:var(--accent-soft)!important;color:var(--accent)!important;
   box-shadow:0 0 0 4px rgba(79,70,229,.13);transform:translateY(-1px)}
@@ -209,7 +230,10 @@ p{margin:0 0 18px}
 .status code{font-size:13px}
 .status .b{color:#dc2626;font-weight:700}
 .status .g{color:#15803d;font-weight:700}
-@media(prefers-reduced-motion:reduce){.run,.bad{box-shadow:none;transform:none}}
+.active{box-shadow:0 0 0 4px rgba(79,70,229,.18)!important}
+.rev.ok .pf{color:#15803d;border-color:#16a34a;background:#e9f9ef}
+.rev.bad .pf{color:#dc2626;border-color:#dc2626;background:#fde8e8}
+@media(prefers-reduced-motion:reduce){.run,.bad,.active{box-shadow:none;transform:none}}
 
 /* ---------- CARDS ---------- */
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px}
@@ -357,60 +381,73 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
     <h2>How SimWorlds Works</h2>
     <p class="lead">From the prompt, a <strong>planning agent</strong> emits one immutable ScenePlan; a <strong>coding agent</strong> then builds the scene through a fixed, ordered sequence of stages. At each stage a tactical plan scopes the work, the coder writes <code>bpy</code>, a deterministic <strong>verifier</strong> checks the scene protocol, and a <strong>reviewer</strong> judges the rendered preview — either can send the stage back for one retry.</p>
 
-    <div class="fig" id="anim">
-      <!-- planning — scene protocol hangs under the planner -->
-      <div class="band top">
-        <div class="col">
-          <div class="fnode" id="an-planner">Planning agent<span class="sub">task decompose · review criteria</span></div>
-          <div class="drop"></div>
-          <span class="chip2" id="an-protocol">🧩 Scene protocol</span>
-        </div>
-        <span class="aarrow amid">→</span>
-        <div class="fnode" id="an-plan">ScenePlan<span class="sub">spec · relations · motion phases</span></div>
+    <div class="pg" id="anim">
+      <!-- Input (top-left) -->
+      <div class="region green pg-input" id="pg-input">Input<span class="rsub">text prompt</span></div>
+
+      <!-- Planning Agent (left) -->
+      <div class="region purple pg-plan">
+        <div class="rtitle">Planning Agent</div>
+        <div class="subbox" id="pg-decompose">Task Decompose</div>
+        <div class="subbox" id="pg-criteria">Review criteria</div>
       </div>
 
-      <div class="bdown">↓</div>
-
-      <!-- coding agent — KB + tools hang under the coder -->
-      <div class="panel">
-        <span class="panel-label">Coding agent · fixed stage sequence</span>
-        <div class="track">
-          <span class="snode">modeling</span><span class="arrow">→</span>
-          <span class="snode">uv</span><span class="arrow">→</span>
-          <span class="snode">texture</span><span class="arrow">→</span>
-          <span class="snode">deformation&nbsp;setup</span><span class="arrow">→</span>
-          <span class="snode">motion</span><span class="arrow">→</span>
-          <span class="snode">camera</span><span class="arrow">→</span>
-          <span class="snode">light</span><span class="arrow">→</span>
-          <span class="snode">render</span>
-        </div>
-        <div class="band top">
-          <div class="fnode" id="an-tactical">Tactical plan<span class="sub">this stage</span></div>
-          <span class="aarrow amid">→</span>
-          <div class="col">
-            <div class="fnode" id="an-coder">Coder<span class="sub">writes bpy</span></div>
-            <div class="drop"></div>
-            <div class="reschips">
-              <span class="chip2" id="an-kb">📚 Knowledge base</span>
-              <span class="chip2" id="an-tools">🔬 Tools · scene_state / previews</span>
-            </div>
-          </div>
-          <span class="aarrow amid">→</span>
-          <div class="fnode" id="an-verifier">Verifier<span class="sub">checks protocol</span></div>
-          <span class="aarrow amid">→</span>
-          <div class="fnode" id="an-reviewer">Reviewer<span class="sub">rendered preview</span></div>
+      <!-- Coding Agent (center-top): task sequence -->
+      <div class="region orange pg-coding">
+        <div class="rtitle">Coding Agent</div>
+        <div class="taskrow">
+          <div class="task" id="pg-task-0"><span class="tname">modeling</span><span class="thumb"></span></div>
+          <div class="task" id="pg-task-1"><span class="tname">uv</span><span class="thumb"></span></div>
+          <div class="task" id="pg-task-2"><span class="tname">texture</span><span class="thumb"></span></div>
+          <div class="task" id="pg-task-3"><span class="tname">deform</span><span class="thumb"></span></div>
+          <div class="task" id="pg-task-4"><span class="tname">motion</span><span class="thumb"></span></div>
+          <div class="task" id="pg-task-5"><span class="tname">camera</span><span class="thumb"></span></div>
+          <div class="task" id="pg-task-6"><span class="tname">light</span><span class="thumb"></span></div>
+          <div class="task" id="pg-task-7"><span class="tname">render</span><span class="thumb"></span></div>
         </div>
       </div>
 
-      <div class="bdown">↓</div>
-
-      <!-- render -->
-      <div class="band">
-        <div class="fnode" id="an-render">Render<span class="sub">frame-sequence video</span></div>
+      <!-- Review (center-bottom): P/F per task -->
+      <div class="region amber pg-review">
+        <div class="rtitle">Review</div>
+        <div class="taskrow">
+          <div class="rev" id="pg-rev-0"><span class="pf">P/F</span>R1</div>
+          <div class="rev" id="pg-rev-1"><span class="pf">P/F</span>R2</div>
+          <div class="rev" id="pg-rev-2"><span class="pf">P/F</span>R3</div>
+          <div class="rev" id="pg-rev-3"><span class="pf">P/F</span>R4</div>
+          <div class="rev" id="pg-rev-4"><span class="pf">P/F</span>R5</div>
+          <div class="rev" id="pg-rev-5"><span class="pf">P/F</span>R6</div>
+          <div class="rev" id="pg-rev-6"><span class="pf">P/F</span>R7</div>
+          <div class="rev" id="pg-rev-7"><span class="pf">P/F</span>R8</div>
+        </div>
       </div>
 
-      <div class="status" id="an-status"></div>
+      <!-- MCP Server (right): tool suite -->
+      <div class="region blue pg-mcp" id="pg-mcp">
+        <div class="rtitle">MCP Server</div>
+        <ul class="tools">
+          <li>docs()</li>
+          <li>execute()</li>
+          <li>scene_state()</li>
+          <li>single_mesh_preview()</li>
+          <li>blender_preview()</li>
+          <li>object_preview()</li>
+          <li>scene_layout_preview()</li>
+          <li>motion_sheet_preview()</li>
+        </ul>
+      </div>
+
+      <!-- Knowledge Base + Blender (far right) -->
+      <div class="region gray pg-kb" id="pg-kb">Knowledge<br>Base</div>
+      <div class="region gray pg-blender" id="pg-blender">Blender</div>
+
+      <!-- Output (bottom): frame-sequence video -->
+      <div class="region green pg-output" id="pg-output">
+        <div class="rtitle">Output</div>
+        <div class="filmstrip"><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
     </div>
+    <div class="status" id="an-status"></div>
   </div>
 </section>
 
@@ -490,79 +527,61 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
   if(!anim) return;
   var $ = function(id){ return document.getElementById(id); };
   var sleep = function(ms){ return new Promise(function(r){ setTimeout(r, ms); }); };
-  var stageEls = Array.prototype.slice.call(anim.querySelectorAll('.snode'));
-  var names = stageEls.map(function(e){ return e.textContent.replace(/\s+/g,' ').trim(); });
-  var planner=$('an-planner'), plan=$('an-plan'),
-      tactical=$('an-tactical'), coder=$('an-coder'), ver=$('an-verifier'), rev=$('an-reviewer'),
-      render=$('an-render'),
-      kb=$('an-kb'), tools=$('an-tools'), protocol=$('an-protocol'), status=$('an-status');
-  var all = [planner,plan,tactical,coder,ver,rev,render,kb,tools,protocol];
+
+  var names = ['modeling','uv','texture','deformation setup','motion','camera','light','render'];
+  var tasks = names.map(function(_,i){ return $('pg-task-'+i); });
+  var revs  = names.map(function(_,i){ return $('pg-rev-'+i); });
+  var input=$('pg-input'), decompose=$('pg-decompose'), criteria=$('pg-criteria'),
+      mcp=$('pg-mcp'), kb=$('pg-kb'), blender=$('pg-blender'), output=$('pg-output'), status=$('an-status');
 
   function set(el, c){
     if(!el) return;
-    el.className = el.className.replace(/\b(run|ok|bad)\b/g,'').replace(/\s+/g,' ').trim();
+    el.className = el.className.replace(/\b(run|ok|bad|active)\b/g,'').replace(/\s+/g,' ').trim();
     if(c) el.className += ' ' + c;
   }
+  function pf(i, t){ var b = revs[i] && revs[i].querySelector('.pf'); if(b) b.textContent = t; }
   function reset(){
-    stageEls.forEach(function(e){ set(e,''); });
-    all.forEach(function(e){ set(e,''); });
+    [input,decompose,criteria,mcp,kb,blender,output].forEach(function(e){ set(e,''); });
+    tasks.forEach(function(e){ set(e,''); });
+    revs.forEach(function(e,i){ set(e,''); pf(i,'P/F'); });
     status.innerHTML = '';
   }
 
-  var T = 1150;                // base beat (ms)
-  var verRejectAt = 3;         // deformation setup → verifier rejects once
-  var revRejectAt = 4;         // motion → reviewer rejects once
+  var T = 1150;                  // base beat (ms)
+  var failAt = {3:1, 4:1};       // deformation setup & motion each fail review once
 
   async function loop(){
     while(true){
       reset();
-      // planner authors the ScenePlan + scene protocol (once)
-      set(planner,'run'); set(protocol,'run'); status.textContent = 'Planning agent decomposes the prompt'; await sleep(T*1.2);
-      set(planner,'ok'); set(plan,'ok'); status.innerHTML = '<span class="g">ScenePlan ready</span> — relations + protocol committed'; await sleep(T);
-      set(protocol,'');
+      // input → planning agent
+      set(input,'active'); status.textContent = 'Input prompt received'; await sleep(T);
+      set(input,''); set(decompose,'run'); status.innerHTML = 'Planning agent decomposes the prompt into tasks'; await sleep(T*1.1);
+      set(decompose,'ok'); set(criteria,'run'); status.textContent = 'Sets per-task review criteria'; await sleep(T);
+      set(criteria,'ok'); await sleep(T*0.5);
 
-      for(var k=0; k<stageEls.length; k++){
-        var last = (k === stageEls.length - 1);
-        set(stageEls[k],'run');
+      // coding agent: task sequence, each reviewed (P/F)
+      for(var k=0; k<tasks.length; k++){
+        set(tasks[k],'run'); set(mcp,'active'); set(kb,'active');
+        status.innerHTML = 'Coding agent builds <b>'+names[k]+'</b> via MCP tools'; await sleep(T);
+        set(mcp,''); set(kb,'');
 
-        if(last){
-          set(coder,'run'); set(kb,'run'); set(tools,'run');
-          status.innerHTML = 'Coder writes <code>bpy</code> for <b>render</b>'; await sleep(T);
-          set(coder,'ok'); set(kb,''); set(tools,''); set(render,'run');
-          status.textContent = 'Rendering frame-sequence video…'; await sleep(T*1.6);
-          set(render,'ok'); set(stageEls[k],'ok');
-          status.innerHTML = '<span class="g">✓ scene complete</span>'; await sleep(T*2.6);
-          break;
+        // review
+        set(revs[k],'run'); pf(k,'?'); status.innerHTML = 'Reviewer checks <b>'+names[k]+'</b>'; await sleep(T*0.9);
+        if(failAt[k]){
+          set(revs[k],'bad'); pf(k,'F');
+          status.innerHTML = '<span class="b">✗ Review fails</span> — feedback to planning, retry'; await sleep(T*1.2);
+          set(criteria,'active'); await sleep(T*0.5); set(criteria,'ok');
+          set(revs[k],''); pf(k,'P/F'); set(tasks[k],'run'); set(mcp,'active');
+          status.innerHTML = 'Coding agent fixes <b>'+names[k]+'</b>'; await sleep(T);
+          set(mcp,''); set(revs[k],'run'); pf(k,'?'); status.textContent = 'Re-review'; await sleep(T*0.9);
         }
-
-        // tactical plan for this stage
-        set(tactical,'run'); status.innerHTML = 'Tactical plan for <b>'+names[k]+'</b>'; await sleep(T*0.9);
-        set(tactical,'ok');
-        // coder consults knowledge base + tools
-        set(coder,'run'); set(kb,'run'); set(tools,'run');
-        status.innerHTML = 'Coder writes <code>bpy</code> for <b>'+names[k]+'</b>'; await sleep(T);
-        set(coder,'ok'); set(kb,''); set(tools,'');
-        // verifier checks scene protocol (mechanical)
-        set(ver,'run'); status.textContent = 'Verifier checks the scene protocol'; await sleep(T);
-        if(k === verRejectAt){
-          set(ver,'bad'); status.innerHTML = '<span class="b">✗ Verifier rejects</span> — coder retries'; await sleep(T*1.3);
-          set(ver,''); set(coder,'run'); set(kb,'run'); status.innerHTML = 'Coder fixes <b>'+names[k]+'</b>'; await sleep(T);
-          set(coder,'ok'); set(kb,''); set(ver,'run'); status.textContent = 'Verifier re-checks'; await sleep(T*0.9);
-        }
-        set(ver,'ok'); status.innerHTML = '<span class="g">✓ protocol holds</span>'; await sleep(T*0.6);
-        // reviewer judges rendered preview (perceptual)
-        set(rev,'run'); status.textContent = 'Reviewer judges the rendered preview'; await sleep(T);
-        if(k === revRejectAt){
-          set(rev,'bad'); status.innerHTML = '<span class="b">✗ Reviewer rejects</span> — coder retries'; await sleep(T*1.3);
-          set(rev,''); set(coder,'run'); set(tools,'run'); status.innerHTML = 'Coder fixes <b>'+names[k]+'</b>'; await sleep(T);
-          set(coder,'ok'); set(tools,''); set(ver,'ok'); set(rev,'run'); status.textContent = 'Reviewer re-judges'; await sleep(T*0.9);
-        }
-        set(rev,'ok'); status.innerHTML = '<span class="g">✓ stage accepted</span>'; await sleep(T*0.6);
-
-        set(stageEls[k],'ok'); set(tactical,''); set(coder,''); set(ver,''); set(rev,'');
-        await sleep(T*0.4);
+        set(revs[k],'ok'); pf(k,'P'); set(tasks[k],'ok');
+        status.innerHTML = '<span class="g">✓ '+names[k]+' accepted</span>'; await sleep(T*0.55);
       }
-      await sleep(T*1.6);
+
+      // output
+      set(output,'active'); status.textContent = 'Rendering frame-sequence video…'; await sleep(T*1.5);
+      status.innerHTML = '<span class="g">✓ scene complete</span>'; await sleep(T*2.4);
     }
   }
 
@@ -571,7 +590,7 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
     var started = false;
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(e){ if(e.isIntersecting && !started){ started = true; loop(); } });
-    }, {threshold: 0.25});
+    }, {threshold: 0.2});
     io.observe(anim);
   } else { loop(); }
 })();
