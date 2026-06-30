@@ -167,6 +167,41 @@ p{margin:0 0 18px}
 .stage.new{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);font-weight:600}
 .arrow{color:var(--soft);align-self:center;font-weight:700}
 
+/* ---------- ANIMATED PIPELINE ---------- */
+.anim{max-width:940px;margin:8px auto 4px}
+.anim-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin:6px 0}
+.stagetrack{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:7px;margin:20px 0}
+.aarrow{color:var(--soft);font-weight:700}
+.snode{
+  font-family:'Roboto Mono',monospace;font-size:13px;font-weight:500;
+  background:#fff;border:1.5px solid var(--line);border-radius:8px;padding:7px 12px;color:var(--fg);
+  transition:border-color .3s ease,background-color .3s ease,color .3s ease,box-shadow .3s ease,transform .3s ease;
+}
+.pnode,.lnode{
+  background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:9px 16px;color:var(--fg);
+  font-weight:600;font-size:14.5px;text-align:center;line-height:1.2;
+  transition:border-color .3s ease,background-color .3s ease,color .3s ease,box-shadow .3s ease,transform .3s ease;
+}
+.pnode small,.lnode small{display:block;font-weight:400;font-size:11px;color:var(--soft);margin-top:2px}
+.loopwrap{position:relative;border:1.5px dashed var(--line);border-radius:14px;padding:20px 14px 14px;margin-top:6px}
+.looptag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  background:var(--bg);padding:0 10px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}
+section.alt .looptag{background:var(--bg-alt)}
+/* states */
+.run{border-color:var(--accent)!important;background:var(--accent-soft)!important;color:var(--accent)!important;
+  box-shadow:0 0 0 4px rgba(79,70,229,.13);transform:translateY(-1px)}
+.run small{color:var(--accent)}
+.ok{border-color:#16a34a!important;background:#e9f9ef!important;color:#15803d!important}
+.ok small{color:#15803d}
+.bad{border-color:#dc2626!important;background:#fde8e8!important;color:#dc2626!important;
+  box-shadow:0 0 0 4px rgba(220,38,38,.12)}
+.bad small{color:#dc2626}
+.status{text-align:center;font-size:14.5px;color:var(--muted);min-height:24px;margin-top:14px;font-weight:500}
+.status code{font-size:13px}
+.status .b{color:#dc2626;font-weight:700}
+.status .g{color:#15803d;font-weight:700}
+@media(prefers-reduced-motion:reduce){.run{box-shadow:none;transform:none}}
+
 /* ---------- CARDS ---------- */
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px}
 .card{
@@ -319,17 +354,41 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
     </ul>
 
 
-    <div class="stages">
-      <span class="stage">modeling</span><span class="arrow">→</span>
-      <span class="stage">uv</span><span class="arrow">→</span>
-      <span class="stage">texture</span><span class="arrow">→</span>
-      <span class="stage new">deformation&nbsp;setup</span><span class="arrow">→</span>
-      <span class="stage new">motion</span><span class="arrow">→</span>
-      <span class="stage">camera</span><span class="arrow">→</span>
-      <span class="stage">light</span><span class="arrow">→</span>
-      <span class="stage">render</span>
+    <div class="anim" id="anim">
+      <!-- planning -->
+      <div class="anim-row">
+        <div class="pnode" id="an-prompt">Text&nbsp;prompt</div>
+        <span class="aarrow">→</span>
+        <div class="pnode" id="an-planner">Planner</div>
+        <span class="aarrow">→</span>
+        <div class="pnode" id="an-plan">ScenePlan</div>
+      </div>
+
+      <!-- fixed stage track (playhead) -->
+      <div class="stagetrack">
+        <span class="snode">modeling</span><span class="arrow">→</span>
+        <span class="snode">uv</span><span class="arrow">→</span>
+        <span class="snode">texture</span><span class="arrow">→</span>
+        <span class="snode">deformation&nbsp;setup</span><span class="arrow">→</span>
+        <span class="snode">motion</span><span class="arrow">→</span>
+        <span class="snode">camera</span><span class="arrow">→</span>
+        <span class="snode">light</span><span class="arrow">→</span>
+        <span class="snode">render</span>
+      </div>
+
+      <!-- per-stage execute → verify → review loop -->
+      <div class="loopwrap">
+        <div class="looptag">per stage</div>
+        <div class="anim-row">
+          <div class="lnode" id="an-coder">Coder<small>writes bpy</small></div>
+          <span class="aarrow">→</span>
+          <div class="lnode" id="an-verifier">Verifier<small>scene protocol</small></div>
+          <span class="aarrow">→</span>
+          <div class="lnode" id="an-reviewer">Reviewer<small>rendered preview</small></div>
+        </div>
+      </div>
+      <div class="status" id="an-status"></div>
     </div>
-    <p class="caption" style="max-width:none">Eight ordered stages. <span style="color:var(--accent);font-weight:600">deformation setup</span> and <span style="color:var(--accent);font-weight:600">motion</span> extend the static pipeline to cover dynamic scenes.</p>
 
     <div class="cards">
       <div class="card">
@@ -420,6 +479,87 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
     </div>
   </div>
 </section>
+
+<script>
+(function(){
+  var anim = document.getElementById('anim');
+  if(!anim) return;
+  var $ = function(id){ return document.getElementById(id); };
+  var sleep = function(ms){ return new Promise(function(r){ setTimeout(r, ms); }); };
+  var stageEls = Array.prototype.slice.call(anim.querySelectorAll('.snode'));
+  var names = stageEls.map(function(e){ return e.textContent.replace(/\s+/g,' ').trim(); });
+  var coder=$('an-coder'), ver=$('an-verifier'), rev=$('an-reviewer'),
+      planner=$('an-planner'), plan=$('an-plan'), prompt=$('an-prompt'), status=$('an-status');
+
+  function set(el, c){
+    el.className = el.className.replace(/\b(run|ok|bad)\b/g,'').replace(/\s+/g,' ').trim();
+    if(c) el.className += ' ' + c;
+  }
+  function reset(){
+    stageEls.forEach(function(e){ set(e,''); });
+    [coder,ver,rev,planner,plan,prompt].forEach(function(e){ set(e,''); });
+    status.innerHTML = '';
+  }
+
+  var T = 720;                 // base beat (ms)
+  var verRejectAt = 3;         // deformation setup → verifier rejects once
+  var revRejectAt = 4;         // motion → reviewer rejects once
+
+  async function loop(){
+    while(true){
+      reset();
+      set(prompt,'run'); status.textContent = 'Prompt received'; await sleep(T);
+      set(prompt,'ok'); set(planner,'run'); status.textContent = 'Planner emits the ScenePlan'; await sleep(T*1.2);
+      set(planner,'ok'); set(plan,'ok'); await sleep(T*0.7);
+
+      for(var k=0; k<stageEls.length; k++){
+        var last = (k === stageEls.length - 1);
+        set(stageEls[k],'run');
+        set(coder,'run'); set(ver,''); set(rev,'');
+        status.innerHTML = 'Coder writes <code>bpy</code> for <b>'+names[k]+'</b>'; await sleep(T);
+
+        if(last){
+          set(coder,'ok'); status.textContent = 'Rendering frame-sequence video…'; await sleep(T*1.5);
+          set(stageEls[k],'ok'); status.innerHTML = '<span class="g">✓ scene complete</span>'; await sleep(T*2.4);
+          break;
+        }
+        set(coder,'ok');
+
+        // verifier (mechanical)
+        set(ver,'run'); status.textContent = 'Verifier checks the scene protocol'; await sleep(T);
+        if(k === verRejectAt){
+          set(ver,'bad'); status.innerHTML = '<span class="b">✗ Verifier rejects</span> — coder retries'; await sleep(T*1.3);
+          set(ver,''); set(coder,'run'); status.innerHTML = 'Coder fixes <b>'+names[k]+'</b>'; await sleep(T);
+          set(coder,'ok'); set(ver,'run'); status.textContent = 'Verifier re-checks'; await sleep(T*0.9);
+        }
+        set(ver,'ok'); status.innerHTML = '<span class="g">✓ protocol holds</span>'; await sleep(T*0.7);
+
+        // reviewer (perceptual)
+        set(rev,'run'); status.textContent = 'Reviewer judges the rendered preview'; await sleep(T);
+        if(k === revRejectAt){
+          set(rev,'bad'); status.innerHTML = '<span class="b">✗ Reviewer rejects</span> — coder retries'; await sleep(T*1.3);
+          set(rev,''); set(coder,'run'); status.innerHTML = 'Coder fixes <b>'+names[k]+'</b>'; await sleep(T);
+          set(coder,'ok'); set(ver,'ok'); set(rev,'run'); status.textContent = 'Reviewer re-judges'; await sleep(T*0.9);
+        }
+        set(rev,'ok'); status.innerHTML = '<span class="g">✓ stage accepted</span>'; await sleep(T*0.7);
+
+        set(stageEls[k],'ok'); set(coder,''); set(ver,''); set(rev,'');
+        await sleep(T*0.45);
+      }
+      await sleep(T*1.6);
+    }
+  }
+
+  // start only when the diagram scrolls into view
+  if('IntersectionObserver' in window){
+    var started = false;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting && !started){ started = true; loop(); } });
+    }, {threshold: 0.25});
+    io.observe(anim);
+  } else { loop(); }
+})();
+</script>
 
 </body>
 </html>
