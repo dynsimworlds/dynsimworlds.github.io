@@ -379,75 +379,40 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
 <section>
   <div class="wrap">
     <h2>How SimWorlds Works</h2>
-    <p class="lead">From the prompt, a <strong>planning agent</strong> emits one immutable ScenePlan; a <strong>coding agent</strong> then builds the scene through a fixed, ordered sequence of stages. At each stage a tactical plan scopes the work, the coder writes <code>bpy</code>, a deterministic <strong>verifier</strong> checks the scene protocol, and a <strong>reviewer</strong> judges the rendered preview — either can send the stage back for one retry.</p>
+    <p class="lead">A planning agent emits one immutable ScenePlan; a coding agent then builds the scene through a fixed, ordered sequence of stages, with a deterministic verifier and a reviewer gating each stage.</p>
 
-    <div class="pg" id="anim">
-      <!-- Input (top-left) -->
-      <div class="region green pg-input" id="pg-input">Input<span class="rsub">text prompt</span></div>
+    <img class="teaser-img" src="assets/figures/pipeline.png" alt="SimWorlds pipeline"
+         style="width:min(1180px,92vw);margin-left:50%;transform:translateX(-50%)">
 
-      <!-- Planning Agent (left) -->
-      <div class="region purple pg-plan">
-        <div class="rtitle">Planning Agent</div>
-        <div class="subbox" id="pg-decompose">Task Decompose</div>
-        <div class="subbox" id="pg-criteria">Review criteria</div>
+    <div class="stages">
+      <span class="stage">modeling</span><span class="arrow">→</span>
+      <span class="stage">uv</span><span class="arrow">→</span>
+      <span class="stage">texture</span><span class="arrow">→</span>
+      <span class="stage new">deformation&nbsp;setup</span><span class="arrow">→</span>
+      <span class="stage new">motion</span><span class="arrow">→</span>
+      <span class="stage">camera</span><span class="arrow">→</span>
+      <span class="stage">light</span><span class="arrow">→</span>
+      <span class="stage">render</span>
+    </div>
+    <p class="caption" style="max-width:none">Eight ordered stages. <span style="color:var(--accent);font-weight:600">deformation setup</span> and <span style="color:var(--accent);font-weight:600">motion</span> extend the static pipeline to cover dynamic scenes.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="ic">🧩</div>
+        <h3>Layered scene protocol</h3>
+        <p>A three-level collection tree with per-object Empty roots makes logical objects, surface contact, and grounding first-class concepts over Blender's native graph.</p>
       </div>
-
-      <!-- Coding Agent (center-top): task sequence -->
-      <div class="region orange pg-coding">
-        <div class="rtitle">Coding Agent</div>
-        <div class="taskrow">
-          <div class="task" id="pg-task-0"><span class="tname">modeling</span><span class="thumb"></span></div>
-          <div class="task" id="pg-task-1"><span class="tname">uv</span><span class="thumb"></span></div>
-          <div class="task" id="pg-task-2"><span class="tname">texture</span><span class="thumb"></span></div>
-          <div class="task" id="pg-task-3"><span class="tname">deform</span><span class="thumb"></span></div>
-          <div class="task" id="pg-task-4"><span class="tname">motion</span><span class="thumb"></span></div>
-          <div class="task" id="pg-task-5"><span class="tname">camera</span><span class="thumb"></span></div>
-          <div class="task" id="pg-task-6"><span class="tname">light</span><span class="thumb"></span></div>
-          <div class="task" id="pg-task-7"><span class="tname">render</span><span class="thumb"></span></div>
-        </div>
+      <div class="card">
+        <div class="ic">✅</div>
+        <h3>Deterministic verifier</h3>
+        <p>After every state-mutating call, a verifier runs the full ruleset (structural, geometric, time-axis) and blocks progress until it passes.</p>
       </div>
-
-      <!-- Review (center-bottom): P/F per task -->
-      <div class="region amber pg-review">
-        <div class="rtitle">Review</div>
-        <div class="taskrow">
-          <div class="rev" id="pg-rev-0"><span class="pf">P/F</span>R1</div>
-          <div class="rev" id="pg-rev-1"><span class="pf">P/F</span>R2</div>
-          <div class="rev" id="pg-rev-2"><span class="pf">P/F</span>R3</div>
-          <div class="rev" id="pg-rev-3"><span class="pf">P/F</span>R4</div>
-          <div class="rev" id="pg-rev-4"><span class="pf">P/F</span>R5</div>
-          <div class="rev" id="pg-rev-5"><span class="pf">P/F</span>R6</div>
-          <div class="rev" id="pg-rev-6"><span class="pf">P/F</span>R7</div>
-          <div class="rev" id="pg-rev-7"><span class="pf">P/F</span>R8</div>
-        </div>
-      </div>
-
-      <!-- MCP Server (right): tool suite -->
-      <div class="region blue pg-mcp" id="pg-mcp">
-        <div class="rtitle">MCP Server</div>
-        <ul class="tools">
-          <li>docs()</li>
-          <li>execute()</li>
-          <li>scene_state()</li>
-          <li>single_mesh_preview()</li>
-          <li>blender_preview()</li>
-          <li>object_preview()</li>
-          <li>scene_layout_preview()</li>
-          <li>motion_sheet_preview()</li>
-        </ul>
-      </div>
-
-      <!-- Knowledge Base + Blender (far right) -->
-      <div class="region gray pg-kb" id="pg-kb">Knowledge<br>Base</div>
-      <div class="region gray pg-blender" id="pg-blender">Blender</div>
-
-      <!-- Output (bottom): frame-sequence video -->
-      <div class="region green pg-output" id="pg-output">
-        <div class="rtitle">Output</div>
-        <div class="filmstrip"><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="card">
+        <div class="ic">🔬</div>
+        <h3>State &amp; render inspection</h3>
+        <p>A tool suite reads live <code>bpy</code> state and multi-angle previews, catching mechanism failures a rendered image misses, like motion that is keyframed rather than simulated.</p>
       </div>
     </div>
-    <div class="status" id="an-status"></div>
   </div>
 </section>
 
@@ -521,80 +486,6 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
   </div>
 </section>
 
-<script>
-(function(){
-  var anim = document.getElementById('anim');
-  if(!anim) return;
-  var $ = function(id){ return document.getElementById(id); };
-  var sleep = function(ms){ return new Promise(function(r){ setTimeout(r, ms); }); };
-
-  var names = ['modeling','uv','texture','deformation setup','motion','camera','light','render'];
-  var tasks = names.map(function(_,i){ return $('pg-task-'+i); });
-  var revs  = names.map(function(_,i){ return $('pg-rev-'+i); });
-  var input=$('pg-input'), decompose=$('pg-decompose'), criteria=$('pg-criteria'),
-      mcp=$('pg-mcp'), kb=$('pg-kb'), blender=$('pg-blender'), output=$('pg-output'), status=$('an-status');
-
-  function set(el, c){
-    if(!el) return;
-    el.className = el.className.replace(/\b(run|ok|bad|active)\b/g,'').replace(/\s+/g,' ').trim();
-    if(c) el.className += ' ' + c;
-  }
-  function pf(i, t){ var b = revs[i] && revs[i].querySelector('.pf'); if(b) b.textContent = t; }
-  function reset(){
-    [input,decompose,criteria,mcp,kb,blender,output].forEach(function(e){ set(e,''); });
-    tasks.forEach(function(e){ set(e,''); });
-    revs.forEach(function(e,i){ set(e,''); pf(i,'P/F'); });
-    status.innerHTML = '';
-  }
-
-  var T = 1150;                  // base beat (ms)
-  var failAt = {3:1, 4:1};       // deformation setup & motion each fail review once
-
-  async function loop(){
-    while(true){
-      reset();
-      // input → planning agent
-      set(input,'active'); status.textContent = 'Input prompt received'; await sleep(T);
-      set(input,''); set(decompose,'run'); status.innerHTML = 'Planning agent decomposes the prompt into tasks'; await sleep(T*1.1);
-      set(decompose,'ok'); set(criteria,'run'); status.textContent = 'Sets per-task review criteria'; await sleep(T);
-      set(criteria,'ok'); await sleep(T*0.5);
-
-      // coding agent: task sequence, each reviewed (P/F)
-      for(var k=0; k<tasks.length; k++){
-        set(tasks[k],'run'); set(mcp,'active'); set(kb,'active');
-        status.innerHTML = 'Coding agent builds <b>'+names[k]+'</b> via MCP tools'; await sleep(T);
-        set(mcp,''); set(kb,'');
-
-        // review
-        set(revs[k],'run'); pf(k,'?'); status.innerHTML = 'Reviewer checks <b>'+names[k]+'</b>'; await sleep(T*0.9);
-        if(failAt[k]){
-          set(revs[k],'bad'); pf(k,'F');
-          status.innerHTML = '<span class="b">✗ Review fails</span> — feedback to planning, retry'; await sleep(T*1.2);
-          set(criteria,'active'); await sleep(T*0.5); set(criteria,'ok');
-          set(revs[k],''); pf(k,'P/F'); set(tasks[k],'run'); set(mcp,'active');
-          status.innerHTML = 'Coding agent fixes <b>'+names[k]+'</b>'; await sleep(T);
-          set(mcp,''); set(revs[k],'run'); pf(k,'?'); status.textContent = 'Re-review'; await sleep(T*0.9);
-        }
-        set(revs[k],'ok'); pf(k,'P'); set(tasks[k],'ok');
-        status.innerHTML = '<span class="g">✓ '+names[k]+' accepted</span>'; await sleep(T*0.55);
-      }
-
-      // output
-      set(output,'active'); status.textContent = 'Rendering frame-sequence video…'; await sleep(T*1.5);
-      status.innerHTML = '<span class="g">✓ scene complete</span>'; await sleep(T*2.4);
-    }
-  }
-
-  // start only when the diagram scrolls into view
-  if('IntersectionObserver' in window){
-    var started = false;
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){ if(e.isIntersecting && !started){ started = true; loop(); } });
-    }, {threshold: 0.2});
-    io.observe(anim);
-  } else { loop(); }
-})();
-</script>
 
 </body>
 </html>
