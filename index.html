@@ -167,40 +167,39 @@ p{margin:0 0 18px}
 .stage.new{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);font-weight:600}
 .arrow{color:var(--soft);align-self:center;font-weight:700}
 
-/* ---------- ANIMATED PIPELINE ---------- */
-.anim{max-width:940px;margin:8px auto 4px}
-.anim-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin:6px 0}
-.stagetrack{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:7px;margin:20px 0}
-.aarrow{color:var(--soft);font-weight:700}
-.snode{
-  font-family:'Roboto Mono',monospace;font-size:13px;font-weight:500;
-  background:#fff;border:1.5px solid var(--line);border-radius:8px;padding:7px 12px;color:var(--fg);
-  transition:border-color .3s ease,background-color .3s ease,color .3s ease,box-shadow .3s ease,transform .3s ease;
-}
-.pnode,.lnode{
-  background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:9px 16px;color:var(--fg);
-  font-weight:600;font-size:14.5px;text-align:center;line-height:1.2;
-  transition:border-color .3s ease,background-color .3s ease,color .3s ease,box-shadow .3s ease,transform .3s ease;
-}
-.pnode small,.lnode small{display:block;font-weight:400;font-size:11px;color:var(--soft);margin-top:2px}
-.loopwrap{position:relative;border:1.5px dashed var(--line);border-radius:14px;padding:20px 14px 14px;margin-top:6px}
-.looptag{position:absolute;top:-10px;left:50%;transform:translateX(-50%);
-  background:var(--bg);padding:0 10px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}
-section.alt .looptag{background:var(--bg-alt)}
+/* ---------- ANIMATED PIPELINE FIGURE ---------- */
+.fig{max-width:900px;margin:14px auto 0}
+.band{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px}
+.bdown{text-align:center;color:var(--soft);font-size:20px;line-height:1;margin:10px 0}
+.aarrow{color:var(--soft);font-weight:700;font-size:15px}
+.fnode{background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:9px 15px;color:var(--fg);
+  font-weight:600;font-size:14px;text-align:center;line-height:1.25;
+  transition:border-color .3s,background-color .3s,color .3s,box-shadow .3s,transform .3s}
+.fnode .sub{display:block;font-weight:400;font-size:10.5px;color:var(--soft);margin-top:2px}
+.panel{position:relative;border:1.5px solid var(--line);border-radius:16px;background:#fafbfe;padding:26px 18px 18px}
+.panel-label{position:absolute;top:-10px;left:22px;background:var(--bg);padding:0 10px;
+  font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.track{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:7px;margin-bottom:20px}
+.snode{font-family:'Roboto Mono',monospace;font-size:12.5px;font-weight:500;background:#fff;
+  border:1.5px solid var(--line);border-radius:8px;padding:6px 11px;color:var(--fg);
+  transition:border-color .3s,background-color .3s,color .3s,box-shadow .3s,transform .3s}
+.chips{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin-top:16px}
+.chip2{font-size:11.5px;font-weight:600;color:var(--muted);background:#fff;border:1.5px solid var(--line);
+  border-radius:999px;padding:5px 12px;transition:border-color .3s,background-color .3s,color .3s,box-shadow .3s}
 /* states */
 .run{border-color:var(--accent)!important;background:var(--accent-soft)!important;color:var(--accent)!important;
   box-shadow:0 0 0 4px rgba(79,70,229,.13);transform:translateY(-1px)}
-.run small{color:var(--accent)}
+.run .sub{color:var(--accent)}
 .ok{border-color:#16a34a!important;background:#e9f9ef!important;color:#15803d!important}
-.ok small{color:#15803d}
+.ok .sub{color:#15803d}
 .bad{border-color:#dc2626!important;background:#fde8e8!important;color:#dc2626!important;
   box-shadow:0 0 0 4px rgba(220,38,38,.12)}
-.bad small{color:#dc2626}
-.status{text-align:center;font-size:14.5px;color:var(--muted);min-height:24px;margin-top:14px;font-weight:500}
+.bad .sub{color:#dc2626}
+.status{text-align:center;font-size:14.5px;color:var(--muted);min-height:24px;margin-top:16px;font-weight:500}
 .status code{font-size:13px}
 .status .b{color:#dc2626;font-weight:700}
 .status .g{color:#15803d;font-weight:700}
-@media(prefers-reduced-motion:reduce){.run{box-shadow:none;transform:none}}
+@media(prefers-reduced-motion:reduce){.run,.bad{box-shadow:none;transform:none}}
 
 /* ---------- CARDS ---------- */
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:14px}
@@ -346,66 +345,59 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
 <section>
   <div class="wrap">
     <h2>How SimWorlds Works</h2>
-    <p class="lead">A planner–coder–reviewer loop drives a fixed, ordered sequence of construction stages:</p>
-    <ul class="blist">
-      <li><strong>Planner</strong> — stays qualitative, committing to intent and assembly, never to numbers.</li>
-      <li><strong>Coder</strong> — owns every number, writing <code>bpy</code> that extends the live scene.</li>
-      <li><strong>Reviewer</strong> — re-judges each stage from rendered evidence and runtime readouts.</li>
-    </ul>
+    <p class="lead">From the prompt, a <strong>planning agent</strong> emits one immutable ScenePlan; a <strong>coding agent</strong> then builds the scene through a fixed, ordered sequence of stages. At each stage a tactical plan scopes the work, the coder writes <code>bpy</code>, a deterministic <strong>verifier</strong> checks the scene protocol, and a <strong>reviewer</strong> judges the rendered preview — either can send the stage back for one retry.</p>
 
-
-    <div class="anim" id="anim">
-      <!-- planning -->
-      <div class="anim-row">
-        <div class="pnode" id="an-prompt">Text&nbsp;prompt</div>
+    <div class="fig" id="anim">
+      <!-- band 1: input + planning -->
+      <div class="band">
+        <div class="fnode" id="an-prompt">Text prompt</div>
         <span class="aarrow">→</span>
-        <div class="pnode" id="an-planner">Planner</div>
+        <div class="fnode" id="an-planner">Planning agent<span class="sub">task decompose · review criteria</span></div>
         <span class="aarrow">→</span>
-        <div class="pnode" id="an-plan">ScenePlan</div>
+        <div class="fnode" id="an-plan">ScenePlan<span class="sub">spec · relations · motion phases</span></div>
       </div>
 
-      <!-- fixed stage track (playhead) -->
-      <div class="stagetrack">
-        <span class="snode">modeling</span><span class="arrow">→</span>
-        <span class="snode">uv</span><span class="arrow">→</span>
-        <span class="snode">texture</span><span class="arrow">→</span>
-        <span class="snode">deformation&nbsp;setup</span><span class="arrow">→</span>
-        <span class="snode">motion</span><span class="arrow">→</span>
-        <span class="snode">camera</span><span class="arrow">→</span>
-        <span class="snode">light</span><span class="arrow">→</span>
-        <span class="snode">render</span>
-      </div>
+      <div class="bdown">↓</div>
 
-      <!-- per-stage execute → verify → review loop -->
-      <div class="loopwrap">
-        <div class="looptag">per stage</div>
-        <div class="anim-row">
-          <div class="lnode" id="an-coder">Coder<small>writes bpy</small></div>
+      <!-- band 2: coding agent -->
+      <div class="panel">
+        <span class="panel-label">Coding agent · fixed stage sequence</span>
+        <div class="track">
+          <span class="snode">modeling</span><span class="arrow">→</span>
+          <span class="snode">uv</span><span class="arrow">→</span>
+          <span class="snode">texture</span><span class="arrow">→</span>
+          <span class="snode">deformation&nbsp;setup</span><span class="arrow">→</span>
+          <span class="snode">motion</span><span class="arrow">→</span>
+          <span class="snode">camera</span><span class="arrow">→</span>
+          <span class="snode">light</span><span class="arrow">→</span>
+          <span class="snode">render</span>
+        </div>
+        <div class="band">
+          <div class="fnode" id="an-tactical">Tactical plan<span class="sub">this stage</span></div>
           <span class="aarrow">→</span>
-          <div class="lnode" id="an-verifier">Verifier<small>scene protocol</small></div>
+          <div class="fnode" id="an-coder">Coder<span class="sub">writes bpy</span></div>
           <span class="aarrow">→</span>
-          <div class="lnode" id="an-reviewer">Reviewer<small>rendered preview</small></div>
+          <div class="fnode" id="an-verifier">Verifier<span class="sub">mechanical check</span></div>
+          <span class="aarrow">→</span>
+          <div class="fnode" id="an-reviewer">Reviewer<span class="sub">rendered preview</span></div>
+        </div>
+        <div class="chips">
+          <span class="chip2" id="an-kb">📚 Knowledge base</span>
+          <span class="chip2" id="an-tools">🔬 Tools · scene_state / previews</span>
+          <span class="chip2" id="an-protocol">🧩 Scene protocol · structural · geometric · time-axis</span>
         </div>
       </div>
-      <div class="status" id="an-status"></div>
-    </div>
 
-    <div class="cards">
-      <div class="card">
-        <div class="ic">🧩</div>
-        <h3>Layered scene protocol</h3>
-        <p>A three-level collection tree with per-object Empty roots makes logical objects, surface contact, and grounding first-class concepts over Blender's native graph.</p>
+      <div class="bdown">↓</div>
+
+      <!-- band 3: output -->
+      <div class="band">
+        <div class="fnode" id="an-render">Render<span class="sub">frame sequence</span></div>
+        <span class="aarrow">→</span>
+        <div class="fnode" id="an-output">🎞 Output video</div>
       </div>
-      <div class="card">
-        <div class="ic">✅</div>
-        <h3>Deterministic verifier</h3>
-        <p>After every state-mutating call, a verifier runs the full ruleset (structural, geometric, time-axis) and blocks progress until it passes.</p>
-      </div>
-      <div class="card">
-        <div class="ic">🔬</div>
-        <h3>State &amp; render inspection</h3>
-        <p>A tool suite reads live <code>bpy</code> state and multi-angle previews, catching mechanism failures a rendered image misses, like motion that is keyframed rather than simulated.</p>
-      </div>
+
+      <div class="status" id="an-status"></div>
     </div>
   </div>
 </section>
@@ -488,16 +480,20 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
   var sleep = function(ms){ return new Promise(function(r){ setTimeout(r, ms); }); };
   var stageEls = Array.prototype.slice.call(anim.querySelectorAll('.snode'));
   var names = stageEls.map(function(e){ return e.textContent.replace(/\s+/g,' ').trim(); });
-  var coder=$('an-coder'), ver=$('an-verifier'), rev=$('an-reviewer'),
-      planner=$('an-planner'), plan=$('an-plan'), prompt=$('an-prompt'), status=$('an-status');
+  var prompt=$('an-prompt'), planner=$('an-planner'), plan=$('an-plan'),
+      tactical=$('an-tactical'), coder=$('an-coder'), ver=$('an-verifier'), rev=$('an-reviewer'),
+      render=$('an-render'), output=$('an-output'),
+      kb=$('an-kb'), tools=$('an-tools'), protocol=$('an-protocol'), status=$('an-status');
+  var all = [prompt,planner,plan,tactical,coder,ver,rev,render,output,kb,tools,protocol];
 
   function set(el, c){
+    if(!el) return;
     el.className = el.className.replace(/\b(run|ok|bad)\b/g,'').replace(/\s+/g,' ').trim();
     if(c) el.className += ' ' + c;
   }
   function reset(){
     stageEls.forEach(function(e){ set(e,''); });
-    [coder,ver,rev,planner,plan,prompt].forEach(function(e){ set(e,''); });
+    all.forEach(function(e){ set(e,''); });
     status.innerHTML = '';
   }
 
@@ -509,42 +505,51 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
     while(true){
       reset();
       set(prompt,'run'); status.textContent = 'Prompt received'; await sleep(T);
-      set(prompt,'ok'); set(planner,'run'); status.textContent = 'Planner emits the ScenePlan'; await sleep(T*1.2);
-      set(planner,'ok'); set(plan,'ok'); await sleep(T*0.7);
+      set(prompt,'ok'); set(planner,'run'); status.textContent = 'Planning agent decomposes the prompt'; await sleep(T*1.2);
+      set(planner,'ok'); set(plan,'ok'); status.innerHTML = '<span class="g">ScenePlan ready</span> — immutable for the run'; await sleep(T*0.9);
 
       for(var k=0; k<stageEls.length; k++){
         var last = (k === stageEls.length - 1);
         set(stageEls[k],'run');
-        set(coder,'run'); set(ver,''); set(rev,'');
-        status.innerHTML = 'Coder writes <code>bpy</code> for <b>'+names[k]+'</b>'; await sleep(T);
 
         if(last){
-          set(coder,'ok'); status.textContent = 'Rendering frame-sequence video…'; await sleep(T*1.5);
-          set(stageEls[k],'ok'); status.innerHTML = '<span class="g">✓ scene complete</span>'; await sleep(T*2.4);
+          set(coder,'run'); set(kb,'run');
+          status.innerHTML = 'Coder writes <code>bpy</code> for <b>render</b>'; await sleep(T);
+          set(coder,'ok'); set(kb,''); set(render,'run');
+          status.textContent = 'Rendering frame-sequence video…'; await sleep(T*1.4);
+          set(render,'ok'); set(output,'run'); await sleep(T*0.9);
+          set(output,'ok'); set(stageEls[k],'ok');
+          status.innerHTML = '<span class="g">✓ scene complete</span>'; await sleep(T*2.4);
           break;
         }
-        set(coder,'ok');
 
-        // verifier (mechanical)
-        set(ver,'run'); status.textContent = 'Verifier checks the scene protocol'; await sleep(T);
+        // tactical plan for this stage
+        set(tactical,'run'); status.innerHTML = 'Tactical plan for <b>'+names[k]+'</b>'; await sleep(T*0.9);
+        set(tactical,'ok');
+        // coder consults knowledge base + tools
+        set(coder,'run'); set(kb,'run'); set(tools,'run');
+        status.innerHTML = 'Coder writes <code>bpy</code> for <b>'+names[k]+'</b>'; await sleep(T);
+        set(coder,'ok'); set(kb,''); set(tools,'');
+        // verifier checks scene protocol (mechanical)
+        set(ver,'run'); set(protocol,'run'); status.textContent = 'Verifier checks the scene protocol'; await sleep(T);
         if(k === verRejectAt){
-          set(ver,'bad'); status.innerHTML = '<span class="b">✗ Verifier rejects</span> — coder retries'; await sleep(T*1.3);
-          set(ver,''); set(coder,'run'); status.innerHTML = 'Coder fixes <b>'+names[k]+'</b>'; await sleep(T);
-          set(coder,'ok'); set(ver,'run'); status.textContent = 'Verifier re-checks'; await sleep(T*0.9);
+          set(ver,'bad'); set(protocol,'bad'); status.innerHTML = '<span class="b">✗ Verifier rejects</span> — coder retries'; await sleep(T*1.3);
+          set(ver,''); set(protocol,''); set(coder,'run'); status.innerHTML = 'Coder fixes <b>'+names[k]+'</b>'; await sleep(T);
+          set(coder,'ok'); set(ver,'run'); set(protocol,'run'); status.textContent = 'Verifier re-checks'; await sleep(T*0.9);
         }
-        set(ver,'ok'); status.innerHTML = '<span class="g">✓ protocol holds</span>'; await sleep(T*0.7);
-
-        // reviewer (perceptual)
-        set(rev,'run'); status.textContent = 'Reviewer judges the rendered preview'; await sleep(T);
+        set(ver,'ok'); set(protocol,'ok'); status.innerHTML = '<span class="g">✓ protocol holds</span>'; await sleep(T*0.6);
+        set(protocol,'');
+        // reviewer judges rendered preview (perceptual)
+        set(rev,'run'); set(tools,'run'); status.textContent = 'Reviewer judges the rendered preview'; await sleep(T);
         if(k === revRejectAt){
           set(rev,'bad'); status.innerHTML = '<span class="b">✗ Reviewer rejects</span> — coder retries'; await sleep(T*1.3);
-          set(rev,''); set(coder,'run'); status.innerHTML = 'Coder fixes <b>'+names[k]+'</b>'; await sleep(T);
-          set(coder,'ok'); set(ver,'ok'); set(rev,'run'); status.textContent = 'Reviewer re-judges'; await sleep(T*0.9);
+          set(rev,''); set(tools,''); set(coder,'run'); status.innerHTML = 'Coder fixes <b>'+names[k]+'</b>'; await sleep(T);
+          set(coder,'ok'); set(ver,'ok'); set(rev,'run'); set(tools,'run'); status.textContent = 'Reviewer re-judges'; await sleep(T*0.9);
         }
-        set(rev,'ok'); status.innerHTML = '<span class="g">✓ stage accepted</span>'; await sleep(T*0.7);
+        set(rev,'ok'); set(tools,''); status.innerHTML = '<span class="g">✓ stage accepted</span>'; await sleep(T*0.6);
 
-        set(stageEls[k],'ok'); set(coder,''); set(ver,''); set(rev,'');
-        await sleep(T*0.45);
+        set(stageEls[k],'ok'); set(tactical,''); set(coder,''); set(ver,''); set(rev,'');
+        await sleep(T*0.4);
       }
       await sleep(T*1.6);
     }
