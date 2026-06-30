@@ -335,17 +335,17 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
       <div class="card">
         <div class="ic">🧩</div>
         <h3>Layered scene protocol</h3>
-        <p>A three-level collection tree plus per-object Empty roots make "logical object," "structural contact," and "grounding" first-class concepts on top of Blender's native graph.</p>
+        <p>A three-level collection tree with per-object Empty roots makes logical objects, surface contact, and grounding first-class concepts over Blender's native graph.</p>
       </div>
       <div class="card">
         <div class="ic">✅</div>
         <h3>Deterministic verifier</h3>
-        <p>After every state-mutating call, a verifier runs the full ruleset — structural, geometric (BVH contact &amp; penetration), and time-axis — and blocks progress until <code>ok=true</code>.</p>
+        <p>After every state-mutating call, a verifier runs the full ruleset (structural, geometric, time-axis) and blocks progress until it passes.</p>
       </div>
       <div class="card">
         <div class="ic">🔬</div>
         <h3>State &amp; render inspection</h3>
-        <p>A tool suite exposes both live <code>bpy</code> engine state — physics caches, modifiers, animation channels — and multi-angle rendered previews, catching mechanism failures (e.g. motion that is keyframed, not simulated) a single image would miss.</p>
+        <p>A tool suite reads live <code>bpy</code> state and multi-angle previews, catching mechanism failures a rendered image misses, like motion that is keyframed rather than simulated.</p>
       </div>
     </div>
   </div>
