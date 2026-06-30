@@ -170,7 +170,12 @@ p{margin:0 0 18px}
 /* ---------- ANIMATED PIPELINE FIGURE ---------- */
 .fig{max-width:900px;margin:14px auto 0}
 .band{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px}
+.band.lft{justify-content:flex-start}
+.band.rgt{justify-content:flex-end}
 .bdown{text-align:center;color:var(--soft);font-size:20px;line-height:1;margin:10px 0}
+.bdown.lft{text-align:left;padding-left:46px}
+.bdown.rgt{text-align:right;padding-right:46px}
+@media(max-width:760px){.band.lft,.band.rgt{justify-content:center}.bdown.lft,.bdown.rgt{text-align:center;padding:0}}
 .aarrow{color:var(--soft);font-weight:700;font-size:15px}
 .fnode{background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:9px 15px;color:var(--fg);
   font-weight:600;font-size:14px;text-align:center;line-height:1.25;
@@ -349,7 +354,7 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
 
     <div class="fig" id="anim">
       <!-- band 1: input + planning -->
-      <div class="band">
+      <div class="band lft">
         <div class="fnode" id="an-prompt">Text prompt</div>
         <span class="aarrow">→</span>
         <div class="fnode" id="an-planner">Planning agent<span class="sub">task decompose · review criteria</span></div>
@@ -357,7 +362,7 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
         <div class="fnode" id="an-plan">ScenePlan<span class="sub">spec · relations · motion phases</span></div>
       </div>
 
-      <div class="bdown">↓</div>
+      <div class="bdown lft">↓</div>
 
       <!-- band 2: coding agent -->
       <div class="panel">
@@ -388,10 +393,10 @@ footer{padding:40px 0 56px;text-align:center;color:var(--soft);font-size:14px}
         </div>
       </div>
 
-      <div class="bdown">↓</div>
+      <div class="bdown rgt">↓</div>
 
       <!-- band 3: output -->
-      <div class="band">
+      <div class="band rgt">
         <div class="fnode" id="an-render">Render<span class="sub">frame sequence</span></div>
         <span class="aarrow">→</span>
         <div class="fnode" id="an-output">🎞 Output video</div>
